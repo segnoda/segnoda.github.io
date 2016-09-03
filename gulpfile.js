@@ -1,28 +1,23 @@
-var gulp = require('gulp'),
-    browserSync = require('browser-sync').create(),
-    sass = require('gulp-sass'),
-    prefix = require('gulp-autoprefixer'),
-    browserify = require('browserify'),
-    rename = require('gulp-rename'),
-    uglify = require('gulp-uglify'),
-    source = require('vinyl-source-stream'),
-    buffer = require('vinyl-buffer'),
-    watchify = require('watchify');
-
-
+var gulp = require('gulp');
 
 /*===============================
 =            Scripts            =
 ===============================*/
 
+var browserify = require('browserify'),
+    babelify = require('babelify'),
+    watchify = require('watchify'),
+    uglify = require('gulp-uglify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer');
+
 gulp.task('scripts', function() {
-    var b = browserify({
-        entries: ['src/scripts/main.js'],
-   		transform: [],
-   		cache: {},
-   		debug: true,
-   		packageCache: {},
-   		fullPaths: true,
+    var b = browserify('src/scripts/main.jsx', {
+        cache: {},
+        packageCache: {},
+        transform: [
+            [babelify, {presets: ['react']}]
+        ]
     });
 
     b = watchify(b);
@@ -37,7 +32,7 @@ function build(b){
         .on('error', console.log.bind(console))
         .pipe(source('main.min.js'))
         .pipe(buffer())
-        .pipe(uglify())
+        .pipe(uglify({mangle: false}))
         .pipe(gulp.dest('js'))
         .pipe(browserSync.reload({stream: true}));
 }
@@ -47,6 +42,10 @@ function build(b){
 /*==============================
 =            Styles            =
 ==============================*/
+
+var sass = require('gulp-sass'),
+    prefix = require('gulp-autoprefixer'),
+    rename = require('gulp-rename');
 
 gulp.task('styles', function() {
     return gulp.src('src/styles/main.scss')
@@ -65,9 +64,25 @@ gulp.task('styles', function() {
 
 
 
+/*=============================
+=            Views            =
+=============================*/
+
+gulp.task('views', function() {
+    gulp.src('src/views/index.pug')
+        .pipe(pug())
+        .on('error', console.log.bind(console))
+        .pipe(gulp.dest('./'))
+        .pipe(browserSync.reload({stream: true}));
+});
+
+
+
 /*====================================
 =            Browser Sync            =
 ====================================*/
+
+var browserSync = require('browser-sync').create();
 
 gulp.task('browser-sync', function() {
     var files = [
@@ -88,9 +103,12 @@ gulp.task('browser-sync', function() {
 =            Watch            =
 =============================*/
 
+var pug = require('gulp-pug');
+
 gulp.task('watch', function() {
-    gulp.watch('src/scripts/main.js', ['scripts']);
+    gulp.watch('src/scripts/main.jsx', ['scripts']);
     gulp.watch('src/styles/main.scss', ['styles']);
+    gulp.watch('src/views/index.pug', ['views']);
 })
 
 
@@ -99,4 +117,4 @@ gulp.task('watch', function() {
 =            Default            =
 ===============================*/
 
-gulp.task('default', ['scripts', 'styles', 'browser-sync', 'watch']);
+gulp.task('default', ['scripts', 'styles', 'views', 'browser-sync', 'watch']);
