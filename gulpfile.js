@@ -29,7 +29,7 @@ gulp.task('scripts', function() {
         cache: {},
         packageCache: {},
         transform: [
-            [babelify, {presets: ['react']}]
+            [babelify, {presets: ['es2015', 'react']}]
         ]
     });
 
@@ -38,7 +38,7 @@ gulp.task('scripts', function() {
 
 gulp.task('scripts:watch', ['scripts'], function() {
     bundler.plugin(watchify);
-    bundler.on('update', function(){
+    bundler.on('update', function() {
         build(bundler);
     });
 });
