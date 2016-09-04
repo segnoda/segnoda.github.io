@@ -1,4 +1,5 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    env = process.env.NODE_ENV = 'production';
 
 /*===============================
 =            Scripts            =
@@ -11,24 +12,10 @@ var browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer');
 
-gulp.task('scripts', function() {
-    var b = browserify('src/scripts/main.jsx', {
-        cache: {},
-        packageCache: {},
-        transform: [
-            [babelify, {presets: ['react']}]
-        ]
-    });
+var bundler;
 
-    b = watchify(b);
-    b.on('update', function(){
-        build(b);
-    });
-    build(b);
-})
-
-function build(b){
-    b.bundle()
+function build(bundler){
+    bundler.bundle()
         .on('error', console.log.bind(console))
         .pipe(source('main.min.js'))
         .pipe(buffer())
@@ -36,6 +23,25 @@ function build(b){
         .pipe(gulp.dest('js'))
         .pipe(browserSync.reload({stream: true}));
 }
+
+gulp.task('scripts', function() {
+    bundler = browserify('src/scripts/main.jsx', {
+        cache: {},
+        packageCache: {},
+        transform: [
+            [babelify, {presets: ['react']}]
+        ]
+    });
+
+    build(bundler);
+});
+
+gulp.task('scripts:watch', ['scripts'], function() {
+    bundler.plugin(watchify);
+    bundler.on('update', function(){
+        build(bundler);
+    });
+});
 
 
 
@@ -62,11 +68,17 @@ gulp.task('styles', function() {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('styles:watch', function() {
+    gulp.watch('src/styles/main.scss', ['styles']);
+});
+
 
 
 /*=============================
 =            Views            =
 =============================*/
+
+var pug = require('gulp-pug');
 
 gulp.task('views', function() {
     gulp.src('src/views/index.pug')
@@ -74,6 +86,10 @@ gulp.task('views', function() {
         .on('error', console.log.bind(console))
         .pipe(gulp.dest('./'))
         .pipe(browserSync.reload({stream: true}));
+});
+
+gulp.task('views:watch', function() {
+    gulp.watch('src/views/index.pug', ['views']);
 });
 
 
@@ -85,12 +101,7 @@ gulp.task('views', function() {
 var browserSync = require('browser-sync').create();
 
 gulp.task('browser-sync', function() {
-    var files = [
-        'index.html',
-        'js/main.min.js',
-        'css/main.min.css'
-    ];
-    browserSync.init(files, {
+    browserSync.init({
         server: {
             baseDir: './'
         }
@@ -103,13 +114,7 @@ gulp.task('browser-sync', function() {
 =            Watch            =
 =============================*/
 
-var pug = require('gulp-pug');
-
-gulp.task('watch', function() {
-    gulp.watch('src/scripts/main.jsx', ['scripts']);
-    gulp.watch('src/styles/main.scss', ['styles']);
-    gulp.watch('src/views/index.pug', ['views']);
-})
+gulp.task('watch', ['scripts:watch', 'styles:watch', 'views:watch']);
 
 
 
