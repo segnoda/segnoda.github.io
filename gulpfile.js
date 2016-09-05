@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-    env = process.env.NODE_ENV = 'production';
+    env = process.env.NODE_ENV = 'development';
 
 /*===============================
 =            Scripts            =
@@ -9,6 +9,7 @@ var browserify = require('browserify'),
     babelify = require('babelify'),
     watchify = require('watchify'),
     uglify = require('gulp-uglify'),
+    gulpif = require('gulp-if'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer');
 
@@ -19,13 +20,13 @@ function build(bundler){
         .on('error', console.log.bind(console))
         .pipe(source('main.min.js'))
         .pipe(buffer())
-        .pipe(uglify({mangle: false}))
+        .pipe(gulpif(env === 'production', uglify()))
         .pipe(gulp.dest('js'))
         .pipe(browserSync.reload({stream: true}));
 }
 
 gulp.task('scripts', function() {
-    bundler = browserify('src/scripts/main.jsx', {
+    bundler = browserify('src/scripts/main.js', {
         cache: {},
         packageCache: {},
         transform: [
@@ -69,7 +70,7 @@ gulp.task('styles', function() {
 });
 
 gulp.task('styles:watch', function() {
-    gulp.watch('src/styles/main.scss', ['styles']);
+    gulp.watch('src/styles/**/*.scss', ['styles']);
 });
 
 

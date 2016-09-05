@@ -1,0 +1,29 @@
+nav {
+    background: #333;
+    text-align: center;
+
+    #main-nav {
+
+        a {
+            color: white;
+            font-size: 2em;
+            line-height: 64px;
+        }
+    }
+
+    #sub-nav {
+        background: white;
+
+        a {
+            display: inline-block;
+            padding: 0 16px;
+            color: #666;
+            line-height: 32px;
+        }
+
+        a:hover {
+            background: #ddd;
+            color: #333;
+        }
+    }
+}
