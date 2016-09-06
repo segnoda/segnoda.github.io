@@ -99,12 +99,14 @@ gulp.task('views:watch', function() {
 =            Browser Sync            =
 ====================================*/
 
-var browserSync = require('browser-sync').create();
+var browserSync = require('browser-sync').create(),
+    historyApiFallback = require('connect-history-api-fallback');
 
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: './'
+            baseDir: './',
+            middleware: [historyApiFallback()]
         }
     });
 });
