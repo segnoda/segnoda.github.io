@@ -15,40 +15,40 @@ export default class About extends React.Component {
         this.jquery();
     }
     jquery() {
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(document).on("scroll", onScroll);
 
-            $('a[href^="#"]').on('click', function (e) {
+            $('a[href^="#"]').on('click', function(e) {
                 e.preventDefault();
                 $(document).off("scroll");
 
-                $('a').each(function () {
+                $('a').each(function() {
                     $(this).removeClass('active');
-                })
+                });
                 $(this).addClass('active');
 
                 var target = this.hash,
-                    menu = target;
-                var $target = $(target);
+                    menu = target,
+                    $target = $(target);
                 $('html, body').stop().animate({
                     'scrollTop': $target.offset().top + 2
-                }, 800, 'swing', function () {
+                }, 800, 'swing', function() {
                     window.location.hash = target;
                     $(document).on("scroll", onScroll);
                 });
             });
         });
 
-        function onScroll(event){
+        function onScroll(event) {
             var scrollPos = $(document).scrollTop();
-            $('.about-nav a').each(function () {
-                var currLink = $(this);
-                var refElement = $(currLink.attr("href"));
+            $('.about-nav a').each(function() {
+                var currLink = $(this),
+                    refElement = $(currLink.attr("href"));
                 if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
                     $('.about-nav a').removeClass("active");
                     currLink.addClass("active");
                 }
-                else{
+                else {
                     currLink.removeClass("active");
                 }
             });
