@@ -6,6 +6,24 @@ export default class Footer extends React.Component {
             <footer>
                 <div>
                     <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
+                    <h1>Footer</h1>
                 </div>
             </footer>
         );

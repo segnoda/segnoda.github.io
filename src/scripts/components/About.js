@@ -5,70 +5,64 @@ import Education from './about/Education';
 import Experience from './about/Experience';
 import Contact from './about/Contact';
 
+var $ = require('jquery');
+
 export default class About extends React.Component {
     componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
+        this.jquery();
     }
-    componentWillUnMount() {
-        window.removeEventListener('scroll', this.handleScroll);
+    componentDidUpdate() {
+        this.jquery();
     }
-    handleScroll(event) {
-        console.log(window.pageYOffset);
-        console.log(document.body.scrollTop);
-        console.log(document.documentElement.scrollTop);
-    }
-    getPageScroll() {
-        var yScroll;
+    jquery() {
+        $(document).ready(function () {
+            $(document).on("scroll", onScroll);
 
-        if (window.pageYOffset) {
-            yScroll = window.pageYOffset;
+            $('a[href^="#"]').on('click', function (e) {
+                e.preventDefault();
+                $(document).off("scroll");
 
-        } else if (document.documentElement && document.documentElement.scrollTop) {
-            yScroll = document.documentElement.scrollTop;
+                $('a').each(function () {
+                    $(this).removeClass('active');
+                })
+                $(this).addClass('active');
 
-        } else if (document.body) {
-            yScroll = document.body.scrollTop;
+                var target = this.hash,
+                    menu = target;
+                var $target = $(target);
+                $('html, body').stop().animate({
+                    'scrollTop': $target.offset().top + 2
+                }, 800, 'swing', function () {
+                    window.location.hash = target;
+                    $(document).on("scroll", onScroll);
+                });
+            });
+        });
+
+        function onScroll(event){
+            var scrollPos = $(document).scrollTop();
+            $('.about-nav a').each(function () {
+                var currLink = $(this);
+                var refElement = $(currLink.attr("href"));
+                if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+                    $('.about-nav a').removeClass("active");
+                    currLink.addClass("active");
+                }
+                else{
+                    currLink.removeClass("active");
+                }
+            });
         }
-        return yScroll;
-    }
-    handleClick(event) {
-        var maxOffset = document.body.scrollHeight - window.innerHeight;
-        console.log(maxOffset);
-        var body = document.body,
-            animateTime = 1000;
-
-        var targetOffset = document.getElementById(event.target.hash.substr(1)).offsetTop;
-        var currentPosition = this.getPageScroll();
-        console.log(targetOffset);
-
-        if (targetOffset > maxOffset) {
-            targetOffset = maxOffset;
-        }
-
-        body.classList.add('in-transition');
-        body.style.WebkitTransform = "translate(0, -" + (targetOffset - currentPosition) + "px)";
-        body.style.MozTransform = "translate(0, -" + (targetOffset - currentPosition) + "px)";
-        body.style.transform = "translate(0, -" + (targetOffset - currentPosition) + "px)";
-
-        window.setTimeout(function () {
-            body.classList.remove('in-transition');
-            body.style.cssText = "";
-            window.scrollTo(0, targetOffset);
-        }, animateTime);
-
-        history.pushState(null, null, event.target.href);
-
-        event.preventDefault();
     }
     render() {
         return(
             <div>
                 <nav>
                      <div className="about-nav">
-                        <a href="#profile" onClick={this.handleClick.bind(this)}>Profile</a>
-                        <a href="#education" onClick={this.handleClick.bind(this)}>Education</a>
-                        <a href="#experience" onClick={this.handleClick.bind(this)}>Experience</a>
-                        <a href="#contact" onClick={this.handleClick.bind(this)}>Contact</a>
+                        <a href="#profile">Profile</a>
+                        <a href="#education">Education</a>
+                        <a href="#experience">Experience</a>
+                        <a href="#contact">Contact</a>
                     </div>
                 </nav> 
                 <Profile />
