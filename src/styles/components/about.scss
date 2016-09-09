@@ -1,20 +1,45 @@
-nav {
-    background: #333;
-    text-align: center;
+.about-nav {
+    top: 50%;
+    margin-top: -83px;
+    left: 1%;
+    position: fixed;
 
-    .about-nav {
-        background: white;
+    a {
+        background: rgba(255, 255, 255, 0.85);
+        display: block;
+        height: 14px;
+        width: 14px;
+        border-radius: 7px;
+        margin: 16px;
+    }
 
-        a {
-            display: inline-block;
-            padding: 0 16px;
-            color: #666;
-            line-height: 32px;
-        }
-
+    @media (hover:on-demand) {
         a:hover {
-            background: #ddd;
-            color: #333;
+            background: rgba(100, 100, 100, 0.85);
         }
     }
+
+    .active {
+        background: rgba(100, 100, 100, 0.85);
+    }
+}
+
+#profile {
+    background-color: #aaaaaa;
+    height: 650px;
+}
+
+#education {
+    background-color: #5da0d7;
+    height: 650px;
+}
+
+#experience {
+    background-color: #a266a7;
+    height: 650px;
+}
+
+#contact {
+    background-color: #7fffd4;
+    height: 650px;
 }

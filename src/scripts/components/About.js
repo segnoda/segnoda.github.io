@@ -1,5 +1,6 @@
 import React from 'react';
 
+import AboutNav from './about/AboutNav';
 import Profile from './about/Profile';
 import Education from './about/Education';
 import Experience from './about/Experience';
@@ -16,11 +17,11 @@ export default class About extends React.Component {
     }
     jquery() {
         $(document).ready(function() {
-            $(document).on("scroll", onScroll);
+            $(document).on('scroll', onScroll);
 
             $('a[href^="#"]').on('click', function(e) {
                 e.preventDefault();
-                $(document).off("scroll");
+                $(document).off('scroll');
 
                 $('a').each(function() {
                     $(this).removeClass('active');
@@ -31,10 +32,10 @@ export default class About extends React.Component {
                     menu = target,
                     $target = $(target);
                 $('html, body').stop().animate({
-                    'scrollTop': $target.offset().top + 2
+                    'scrollTop': $target.offset().top
                 }, 800, 'swing', function() {
                     window.location.hash = target;
-                    $(document).on("scroll", onScroll);
+                    $(document).on('scroll', onScroll);
                 });
             });
         });
@@ -43,28 +44,21 @@ export default class About extends React.Component {
             var scrollPos = $(document).scrollTop();
             $('.about-nav a').each(function() {
                 var currLink = $(this),
-                    refElement = $(currLink.attr("href"));
+                    refElement = $(currLink.attr('href'));
                 if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
-                    $('.about-nav a').removeClass("active");
-                    currLink.addClass("active");
+                    $('.about-nav a').removeClass('active');
+                    currLink.addClass('active');
                 }
                 else {
-                    currLink.removeClass("active");
+                    currLink.removeClass('active');
                 }
             });
         }
     }
     render() {
         return(
-            <div>
-                <nav>
-                     <div className="about-nav">
-                        <a href="#profile">Profile</a>
-                        <a href="#education">Education</a>
-                        <a href="#experience">Experience</a>
-                        <a href="#contact">Contact</a>
-                    </div>
-                </nav> 
+            <div className="about">
+                <AboutNav />
                 <Profile />
                 <Education />
                 <Experience />
