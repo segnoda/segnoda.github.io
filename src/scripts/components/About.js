@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 import AboutNav from './about/AboutNav';
 import Profile from './about/Profile';
@@ -6,16 +7,14 @@ import Education from './about/Education';
 import Experience from './about/Experience';
 import Contact from './about/Contact';
 
-var $ = require('jquery');
-
 export default class About extends React.Component {
     componentDidMount() {
-        this.jquery();
+        this.handleSroll();
     }
     componentDidUpdate() {
-        this.jquery();
+        this.handleSroll();
     }
-    jquery() {
+    handleSroll() {
         $(document).ready(function() {
             $(document).on('scroll', onScroll);
 
