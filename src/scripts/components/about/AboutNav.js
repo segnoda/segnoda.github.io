@@ -5,7 +5,7 @@ export default class AboutNav extends React.Component {
         return(
             <nav>
                 <div className="about-nav">
-                    <a href="#nav" className="active"/>
+                    <a href="#nav"/>
                     <a href="#profile"/>
                     <a href="#education"/>
                     <a href="#experience"/>
