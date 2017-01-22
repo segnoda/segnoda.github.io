@@ -14,7 +14,6 @@ var browserify = require('browserify'),
     buffer = require('vinyl-buffer');
 
 var bundler;
-var jqbundler;
 
 function build(bundler){
     bundler.bundle()
